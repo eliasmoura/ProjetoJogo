@@ -13,6 +13,8 @@ class Inimigos(Personagem):
         self.num_jogadores = num_jogadores
         
     def setInimigos(self,render):
-        self.pokemao = Pokemao(render)
+        self.pokemao = Pokemao(render,1)
         
-        
+    def getInimigos(self,num):
+        if num != 0:
+            return self.pokemao

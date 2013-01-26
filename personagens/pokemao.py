@@ -14,9 +14,10 @@ from pandac.PandaModules import *
 from itens.items import Items
 
 class Pokemao():#Inimigos):
-    def __init__(self,render):
+    def __init__(self,render, num):
         self.nome = "Pokemao"
         self.agi = 10
+        self.hp = 10
         self.int = 5
         self.str = 1
         self.dano = 5
@@ -26,13 +27,16 @@ class Pokemao():#Inimigos):
         self.arma = None
         self.escudo = None
         self.armadura = None
+        self.delete = False
         self.render = render
-        self.loadModels()
+        self.loadModels(num)
         self.setAI()
         
+    
+    def getPos(self):
+        return self.pokemao.getPos()   
         
-        
-    def loadModels(self):
+    def loadModels(self,num):
         # Seeker
         pokemaoPos = Vec3(-10,-30.0,2.10)
         self.pokemao = Actor('personagens/Modelos/Pokeperna/p1',
@@ -44,6 +48,7 @@ class Pokemao():#Inimigos):
         self.pokemao.reparentTo(self.render)
         #self.wanderer.setScale(0.5)
         self.pokemao.setPos(pokemaoPos)
+        self.pokemao.setTag("inimigo",str(num))
       
     def setAI(self):
         #Creating AI World
@@ -61,5 +66,9 @@ class Pokemao():#Inimigos):
         
     #to update the AIWorld    
     def AIUpdate(self,task):
+        if self.hp < 1:
+            #self.cleanup()
+            self.pokemao.detachNode()
+            self.delete = True
         self.AIworld.update()            
         return Task.cont

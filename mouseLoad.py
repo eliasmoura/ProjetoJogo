@@ -8,6 +8,7 @@ from pandac.PandaModules import CollisionRay
 from pandac.PandaModules import CollisionNode
 from pandac.PandaModules import CollisionHandlerQueue
 from pandac.PandaModules import CollisionTraverser
+from pandac.PandaModules import GeomNode
 
 class ControleMouse():
     def __init__(self, render, camera):
@@ -29,12 +30,15 @@ class ControleMouse():
         self.pst = CollisionTraverser()            #Make a traverser 
         self.hqp     = CollisionHandlerQueue()         #Make a handler 
         #Make a collision node for our picker ray 
+        
         self.pstNode = CollisionNode('mouseRaytoObj') 
         #Attach that node to the camera since the ray will need to be positioned relative to it 
-        self.pstNode2 = camera.attachNewNode(self.pickerNode) 
+        self.pstNode.setFromCollideMask(GeomNode.getDefaultCollideMask())
+        self.pstNode2 = camera.attachNewNode(self.pstNode) 
+        self.pickerRayObj = CollisionRay()   
         #Everything to be picked will use bit 1. This way if we were doing other collision we could seperate it 
         #self.pstNode.setFromCollideMask(BitMask32.bit(1)) 
-        self.pstNode.addSolid(self.pickerRay)      #Add it to the collision node 
+        self.pstNode.addSolid(self.pickerRayObj)      #Add it to the collision node 
         #Register the ray as something that can cause collisions 
         self.pst.addCollider(self.pstNode2, self.hqp) 
         #self.pst.showCollisions(render) 
